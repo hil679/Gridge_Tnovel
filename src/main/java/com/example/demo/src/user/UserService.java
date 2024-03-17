@@ -59,10 +59,10 @@ public class UserService {
 
     }
 
-    public void modifyUserName(Long userId, PatchUserReq patchUserReq) {
+    public void modifyUserName(Long userId, PatchUserReq.PatchUserNameReq patchUserNameReq) {
         User user = userRepository.findByIdAndState(userId, ACTIVE)
                 .orElseThrow(() -> new BaseException(NOT_FIND_USER));
-        user.updateName(patchUserReq.getName());
+        user.updateName(patchUserNameReq.getName());
     }
 
     public void deleteUser(Long userId) {

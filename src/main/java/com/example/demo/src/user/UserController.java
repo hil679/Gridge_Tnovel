@@ -95,15 +95,30 @@ public class UserController {
      */
     @ResponseBody
     @PatchMapping("/{userId}")
-    public BaseResponse<String> modifyUserName(@PathVariable("userId") Long userId, @RequestBody PatchUserReq patchUserReq){
+    public BaseResponse<String> modifyUserName(@PathVariable("userId") Long userId, @RequestBody PatchUserReq.PatchUserNameReq patchUserNameReq){
 
         Long jwtUserId = jwtService.getUserId();
 
-        userService.modifyUserName(userId, patchUserReq);
+        userService.modifyUserName(userId, patchUserNameReq);
 
         String result = "수정 완료!!";
         return new BaseResponse<>(result);
 
+    }
+
+    /**
+     * password변경 API
+     * [PATCH] /app/users/pw/:userId
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/pw/{userId}")
+    public BaseResponse<String> modifyPassword(@PathVariable("userId") Long userId, @RequestBody PatchUserReq.PatchUserPasswordReq patchUserPasswordReq){
+        //기존 pw 입력하고 맞는지 체크
+
+        //새 pw 받기
+        String result = "수정 완료!!";
+        return new BaseResponse<>(result);
     }
 
     /**
@@ -132,6 +147,7 @@ public class UserController {
     public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq){
         // TODO: 로그인 값들에 대한 형식적인 validatin 처리해주셔야합니다!
         // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
+        //id, pw validation
         PostLoginRes postLoginRes = userService.logIn(postLoginReq);
         return new BaseResponse<>(postLoginRes);
     }
@@ -166,5 +182,25 @@ public class UserController {
         return new BaseResponse<>(getSocialOAuthRes);
     }
 
+    /**
+     * 비밀번호 문제 시 문자 인증, 로그인 코드(새 password)재전송
+     *
+     */
+    @ResponseBody
+    @GetMapping(value = "/find/pw")
+    public String getTempLoginPassword(String phoneNumber) {
 
+        return "TempAccessPassword";
+    }
+
+    /**
+     * 동의 받기
+     *
+     */
+    @ResponseBody
+    @PostMapping(value = "/agree")
+    public String setAgreement(boolean agreement) {
+
+        return "success agree process";
+    }
 }

@@ -5,10 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class PatchUserReq {
-    private String name;
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PatchUserNameReq{
+        private String name;
+    }
+    public static class PatchUserPasswordReq {
+        private String existPassword;
+        private String newPassword;
+    }
 }

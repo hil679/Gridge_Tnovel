@@ -1,9 +1,12 @@
 package com.example.demo.src.user.entity;
 
 import com.example.demo.common.entity.BaseEntity;
+import com.example.demo.src.agreement.entity.Agreement;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
@@ -23,11 +26,30 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false, length = 20)
+    private String userId;
+
     @Column(nullable = false, length = 30)
     private String name;
 
+    @Column(nullable = false, length = 20)
+    private String phoneNumber;
+
     @Column(nullable = false)
     private boolean isOAuth;
+
+    @Column(nullable = false)
+    private String loginType;
+
+    @Column(nullable = false)
+    private LocalDate registerDate;
+
+    @Column(nullable = false)
+    private LocalDate birthday;
+
+    @OneToOne
+    @JoinColumn(name = "agreementId")
+    private Agreement agreement;
 
     @Builder
     public User(Long id, String email, String password, String name, boolean isOAuth) {
@@ -36,10 +58,14 @@ public class User extends BaseEntity {
         this.password = password;
         this.name = name;
         this.isOAuth = isOAuth;
+        this.registerDate = LocalDate.now();
     }
 
     public void updateName(String name) {
         this.name = name;
+    }
+    public void updateBirthDay(String birthday) {
+        this.birthday = LocalDate.parse(birthday, DateTimeFormatter.ISO_DATE); //"ex) 2024-03-11"
     }
 
     public void deleteUser() {

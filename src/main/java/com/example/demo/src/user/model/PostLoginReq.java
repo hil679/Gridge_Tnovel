@@ -11,5 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostLoginReq {
     private String email;
+    private String phoneNumber;
+    private String name;
     private String password;
 }
