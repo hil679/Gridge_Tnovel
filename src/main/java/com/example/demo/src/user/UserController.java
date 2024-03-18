@@ -101,6 +101,19 @@ public class UserController {
         return new BaseResponse<>(postUserRes);
     }
 
+    /**
+    * 실시간으로 전화번호 타당성 검사 위한 api
+     */
+    @PostMapping("validate/phone-number/{phoneNumber}")
+    public BaseResponse<String> validatePhoneNumber(@PathVariable String phoneNumebr){
+        if (userService.checkUserByPhoneNumber(phoneNumebr)) {
+            return new BaseResponse<>(DUPLICATED_PHONE_NUMBER);
+        } else if (isNotRegexPhoneNumber(phoneNumebr)) {
+            return new BaseResponse<>(POST_USERS_INVALID_PHONE_NUMBER);
+        }
+        return new BaseResponse<>(VALID_PHONE_NUMBER);
+    }
+
     
 
     /**
