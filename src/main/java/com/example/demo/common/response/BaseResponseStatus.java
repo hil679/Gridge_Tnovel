@@ -19,14 +19,27 @@ public enum BaseResponseStatus {
      */
 
     USERS_EMPTY_EMAIL(false, HttpStatus.BAD_REQUEST.value(), "이메일을 입력해주세요."),
+    USERS_EMPTY_PASSWORD(false, HttpStatus.BAD_REQUEST.value(), "비밀번호를 입력해주세요."),
+    USERS_EMPTY_PHONE_NUMBER(false, HttpStatus.BAD_REQUEST.value(), "전화번호를 입력해주세요."),
+    USERS_EMPTY_NAME(false, HttpStatus.BAD_REQUEST.value(), "이름을 입력해주세요."),
+    USERS_EMPTY_ID_NICKNAME(false, HttpStatus.BAD_REQUEST.value(), "아이디(사용자 이름)을 입력해주세요."),
     TEST_EMPTY_COMMENT(false, HttpStatus.BAD_REQUEST.value(), "코멘트를 입력해주세요."),
+
     POST_USERS_INVALID_EMAIL(false, HttpStatus.BAD_REQUEST.value(), "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,HttpStatus.BAD_REQUEST.value(),"중복된 이메일입니다."),
+    POST_USERS_INVALID_PASSWORD(false, HttpStatus.BAD_REQUEST.value(), "비밀번호는 6자 이상 20자 이하여야 합니다."),
+    POST_USERS_INVALID_PHONE_NUMBER(false, HttpStatus.BAD_REQUEST.value(), "전화번호에 숫자만 입력해주세요."),
+    POST_USERS_OVER_LENGTH_PHONE_NUMBER(false, HttpStatus.BAD_REQUEST.value(), "전화번호는 6자 이상 20자 이하여야 합니다."),
+    POST_USERS_OVER_LENGTH_NAME(false, HttpStatus.BAD_REQUEST.value(), "이름은 20자 이하여야 합니다."),
+    POST_USERS_INVALID_ID_NICKNAME(false, HttpStatus.BAD_REQUEST.value(), "사용자 이름에는 문자, 숫자, 밑줄 및 마침표만 사용할 수 있습니다."),
+    POST_USERS_OVER_LENGTH_ID_NICKNAME(false, HttpStatus.BAD_REQUEST.value(), "아이디(사용자 이름) 20자 이하여야 합니다."),
     POST_TEST_EXISTS_MEMO(false,HttpStatus.BAD_REQUEST.value(),"중복된 메모입니다."),
 
     RESPONSE_ERROR(false, HttpStatus.NOT_FOUND.value(), "값을 불러오는데 실패하였습니다."),
 
     DUPLICATED_EMAIL(false, HttpStatus.BAD_REQUEST.value(), "중복된 이메일입니다."),
+    DUPLICATED_PHONE_NUMBER(false, HttpStatus.BAD_REQUEST.value(), "중복된 전화번호입니다."),
+    DUPLICATED_ID_NICKNAME(false, HttpStatus.BAD_REQUEST.value(), "중복된 사용자 이름입니다."),
     INVALID_MEMO(false,HttpStatus.NOT_FOUND.value(), "존재하지 않는 메모입니다."),
     FAILED_TO_LOGIN(false,HttpStatus.NOT_FOUND.value(),"없는 아이디거나 비밀번호가 틀렸습니다."),
     EMPTY_JWT(false, HttpStatus.UNAUTHORIZED.value(), "JWT를 입력해주세요."),
@@ -50,7 +63,13 @@ public enum BaseResponseStatus {
     DELETE_FAIL_USERNAME(false,HttpStatus.INTERNAL_SERVER_ERROR.value(),"유저 삭제 실패"),
     MODIFY_FAIL_MEMO(false,HttpStatus.INTERNAL_SERVER_ERROR.value(),"메모 수정 실패"),
 
-    UNEXPECTED_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "예상치 못한 에러가 발생했습니다.");
+    UNEXPECTED_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "예상치 못한 에러가 발생했습니다."),
+
+    /**
+     * 200: SUCCESS
+     */
+    VALID_PHONE_NUMBER(true, HttpStatus.OK.value(), "알맞은 전화번호 형식입니다."),
+    VALID_ID_NICKNAME(true, HttpStatus.OK.value(), "알맞은 아이디(사용자 이름) 형식입니다.");
 
 
     private final boolean isSuccess;

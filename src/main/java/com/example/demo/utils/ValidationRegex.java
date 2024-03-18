@@ -10,5 +10,14 @@ public class ValidationRegex {
         Matcher matcher = pattern.matcher(target);
         return matcher.find();
     }
+    public static boolean isNotRegexPhoneNumber(String target) {
+        String regex = "^[0-9]+$";
+        return !target.matches(regex);
+    }
+
+    public static boolean isNotRegexIdNickname(String target) {
+        String regex = "^[A-Za-z._]*$";
+        return !target.matches(regex);
+    }
 }
 

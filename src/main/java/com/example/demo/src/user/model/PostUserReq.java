@@ -1,5 +1,6 @@
 package com.example.demo.src.user.model;
 
+import com.example.demo.common.Constant;
 import com.example.demo.src.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,10 @@ import lombok.Setter;
 public class PostUserReq {
     private String email;
     private String password;
+    private String phoneNumber;
+    private String idNickname;
     private String name;
+    private Constant.SocialLoginType loginType;
 
     private boolean isOAuth;
 
@@ -22,6 +26,9 @@ public class PostUserReq {
                 .email(this.email)
                 .password(this.password)
                 .name(this.name)
+                .idNickname(this.idNickname)
+                .phoneNumber(this.phoneNumber)
+                .loginType(this.loginType)
                 .isOAuth(this.isOAuth)
                 .build();
     }

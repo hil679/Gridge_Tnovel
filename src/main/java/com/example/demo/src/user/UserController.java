@@ -16,7 +16,7 @@ import java.util.List;
 
 
 import static com.example.demo.common.response.BaseResponseStatus.*;
-import static com.example.demo.utils.ValidationRegex.isRegexEmail;
+import static com.example.demo.utils.ValidationRegex.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -42,16 +42,66 @@ public class UserController {
     @PostMapping("")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
         // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
-        if(postUserReq.getEmail() == null){
+        int MAX_LENGTH = 20;
+        int MIN_LENGTH_PW = 6;
+        String email = postUserReq.getEmail();
+        String password = postUserReq.getPassword();
+        String phoneNumebr = postUserReq.getPhoneNumber();
+        String name = postUserReq.getName();
+        String idNickname = postUserReq.getIdNickname();
+
+        if(email == null){
             return new BaseResponse<>(USERS_EMPTY_EMAIL);
-        }
-        //이메일 정규표현
-        if(!isRegexEmail(postUserReq.getEmail())){
+        } else if (!isRegexEmail(email)){
             return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
         }
+
+        //phonenumber validation
+        if(phoneNumebr == null){
+            return new BaseResponse<>(USERS_EMPTY_PHONE_NUMBER);
+        } else if (isNotRegexPhoneNumber(phoneNumebr)) {
+            return new BaseResponse<>(POST_USERS_INVALID_PHONE_NUMBER);
+        } else if (phoneNumebr.length() > MAX_LENGTH){
+            return new BaseResponse<>(POST_USERS_OVER_LENGTH_PHONE_NUMBER);
+        }
+
+        //name validation
+        if(name == null){
+            return new BaseResponse<>(USERS_EMPTY_NAME);
+        } else if(name.length() > MAX_LENGTH) {
+            return new BaseResponse<>(POST_USERS_OVER_LENGTH_NAME);
+        }
+
+        //id(nickname) validation
+        if(idNickname == null){
+            return new BaseResponse<>(USERS_EMPTY_ID_NICKNAME);
+        } else if(idNickname.length() > MAX_LENGTH) {
+            return new BaseResponse<>(POST_USERS_OVER_LENGTH_ID_NICKNAME);
+        } else if(isNotRegexIdNickname(idNickname)) {
+            return new BaseResponse<>(POST_USERS_INVALID_ID_NICKNAME);
+        }
+
+        //pw validation
+        if(password == null){
+            return new BaseResponse<>(USERS_EMPTY_PASSWORD);
+        } else if(idNickname.length() > MAX_LENGTH) {
+            return new BaseResponse<>(POST_USERS_INVALID_PASSWORD);
+        }
+
+        // check duplicate
+        if (userService.checkUserByEmail(email)) {
+            return new BaseResponse<>(DUPLICATED_EMAIL);
+        } else if (userService.checkUserByPhoneNumber(phoneNumebr)) {
+            return new BaseResponse<>(DUPLICATED_PHONE_NUMBER);
+        } else if (userService.checkUserByIdNickname(idNickname)) {
+            return new BaseResponse<>(DUPLICATED_ID_NICKNAME);
+        }
+
         PostUserRes postUserRes = userService.createUser(postUserReq);
         return new BaseResponse<>(postUserRes);
     }
+
+    
 
     /**
      * 회원 조회 API

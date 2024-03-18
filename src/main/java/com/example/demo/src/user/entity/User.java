@@ -1,5 +1,6 @@
 package com.example.demo.src.user.entity;
 
+import com.example.demo.common.Constant;
 import com.example.demo.common.entity.BaseEntity;
 import com.example.demo.src.agreement.entity.Agreement;
 import lombok.*;
@@ -27,36 +28,40 @@ public class User extends BaseEntity {
     private String password;
 
     @Column(nullable = false, length = 20)
-    private String userId;
+    private String idNickname;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false)
     private String phoneNumber;
 
     @Column(nullable = false)
     private boolean isOAuth;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String loginType;
+    private Constant.SocialLoginType loginType;
 
     @Column(nullable = false)
     private LocalDate registerDate;
 
-    @Column(nullable = false)
+    @Column
     private LocalDate birthday;
 
-    @OneToOne
-    @JoinColumn(name = "agreementId")
-    private Agreement agreement;
+//    @OneToOne
+//    @JoinColumn(name = "agreementId")
+//    private Agreement agreement;
 
     @Builder
-    public User(Long id, String email, String password, String name, boolean isOAuth) {
+    public User(Long id, String email, String password, String name, String idNickname, String phoneNumber, Constant.SocialLoginType loginType, boolean isOAuth) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
+        this.idNickname = idNickname;
+        this.phoneNumber = phoneNumber;
+        this.loginType = loginType;
         this.isOAuth = isOAuth;
         this.registerDate = LocalDate.now();
     }

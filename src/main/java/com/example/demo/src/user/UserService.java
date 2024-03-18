@@ -41,6 +41,12 @@ public class UserService {
         try {
             encryptPwd = new SHA256().encrypt(postUserReq.getPassword());
             postUserReq.setPassword(encryptPwd);
+
+            String encryptPhoneNumber = new SHA256().encrypt(postUserReq.getPhoneNumber());
+            postUserReq.setPhoneNumber(encryptPhoneNumber);
+
+            String encryptName= new SHA256().encrypt(postUserReq.getName());
+            postUserReq.setName(encryptName);
         } catch (Exception exception) {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
@@ -98,6 +104,20 @@ public class UserService {
     @Transactional(readOnly = true)
     public boolean checkUserByEmail(String email) {
         Optional<User> result = userRepository.findByEmailAndState(email, ACTIVE);
+        if (result.isPresent()) return true;
+        return false;
+    }
+
+    @Transactional(readOnly = true)
+    public boolean checkUserByPhoneNumber(String phoneNumber) {
+        Optional<User> result = userRepository.findByPhoneNumberAndState(phoneNumber, ACTIVE);
+        if (result.isPresent()) return true;
+        return false;
+    }
+
+    @Transactional(readOnly = true)
+    public boolean checkUserByIdNickname(String idNickname) {
+        Optional<User> result = userRepository.findByIdNicknameAndState(idNickname, ACTIVE);
         if (result.isPresent()) return true;
         return false;
     }
