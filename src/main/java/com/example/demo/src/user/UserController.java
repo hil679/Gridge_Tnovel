@@ -114,7 +114,18 @@ public class UserController {
         return new BaseResponse<>(VALID_PHONE_NUMBER);
     }
 
-    
+    /**
+     * 실시간으로 사용자 이름 타당성 검사 위한 api
+     */
+    @PostMapping("validate/id-nickname/{idNickname}")
+    public BaseResponse<String> validateIdNickname(@PathVariable String idNickname){
+        if (userService.checkUserByIdNickname(idNickname)) {
+            return new BaseResponse<>(DUPLICATED_PHONE_NUMBER);
+        } else if (isNotRegexIdNickname(idNickname)) {
+            return new BaseResponse<>(POST_USERS_INVALID_PHONE_NUMBER);
+        }
+        return new BaseResponse<>(VALID_ID_NICKNAME);
+    }
 
     /**
      * 회원 조회 API
