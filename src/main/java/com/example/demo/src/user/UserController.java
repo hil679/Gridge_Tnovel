@@ -4,6 +4,7 @@ package com.example.demo.src.user;
 import com.example.demo.common.Constant.SocialLoginType;
 import com.example.demo.common.oauth.OAuthService;
 import com.example.demo.utils.JwtService;
+import com.example.demo.utils.SHA256;
 import lombok.RequiredArgsConstructor;
 import com.example.demo.common.exceptions.BaseException;
 import com.example.demo.common.response.BaseResponse;
@@ -84,7 +85,7 @@ public class UserController {
         //pw validation
         if(password == null){
             return new BaseResponse<>(USERS_EMPTY_PASSWORD);
-        } else if(idNickname.length() > MAX_LENGTH) {
+        } else if(password.length() > MAX_LENGTH && password.length() < MIN_LENGTH_PW) {
             return new BaseResponse<>(POST_USERS_INVALID_PASSWORD);
         }
 
@@ -105,10 +106,10 @@ public class UserController {
     * 실시간으로 전화번호 타당성 검사 위한 api
      */
     @PostMapping("validate/phone-number/{phoneNumber}")
-    public BaseResponse<String> validatePhoneNumber(@PathVariable String phoneNumebr){
-        if (userService.checkUserByPhoneNumber(phoneNumebr)) {
+    public BaseResponse<String> validatePhoneNumber(@PathVariable String phoneNumber){
+        if (userService.checkUserByPhoneNumber(phoneNumber)) {
             return new BaseResponse<>(DUPLICATED_PHONE_NUMBER);
-        } else if (isNotRegexPhoneNumber(phoneNumebr)) {
+        } else if (isNotRegexPhoneNumber(phoneNumber)) {
             return new BaseResponse<>(POST_USERS_INVALID_PHONE_NUMBER);
         }
         return new BaseResponse<>(VALID_PHONE_NUMBER);

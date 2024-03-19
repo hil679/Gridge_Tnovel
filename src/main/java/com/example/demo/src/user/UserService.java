@@ -110,7 +110,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public boolean checkUserByPhoneNumber(String phoneNumber) {
-        Optional<User> result = userRepository.findByPhoneNumberAndState(phoneNumber, ACTIVE);
+        Optional<User> result = userRepository.findByPhoneNumberAndState(new SHA256().encrypt(phoneNumber), ACTIVE);
         if (result.isPresent()) return true;
         return false;
     }
