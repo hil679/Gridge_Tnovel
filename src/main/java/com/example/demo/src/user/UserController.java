@@ -118,12 +118,13 @@ public class UserController {
     /**
      * 실시간으로 사용자 이름 타당성 검사 위한 api
      */
-    @PostMapping("validate/id-nickname/{idNickname}")
-    public BaseResponse<String> validateIdNickname(@PathVariable String idNickname){
+    @PostMapping("validate/id-nickname")
+    public BaseResponse<String> validateIdNickname(@RequestParam String idNickname){
+        System.out.println(idNickname);
         if (userService.checkUserByIdNickname(idNickname)) {
-            return new BaseResponse<>(DUPLICATED_PHONE_NUMBER);
+            return new BaseResponse<>(DUPLICATED_ID_NICKNAME);
         } else if (isNotRegexIdNickname(idNickname)) {
-            return new BaseResponse<>(POST_USERS_INVALID_PHONE_NUMBER);
+            return new BaseResponse<>(POST_USERS_INVALID_ID_NICKNAME);
         }
         return new BaseResponse<>(VALID_ID_NICKNAME);
     }

@@ -16,8 +16,8 @@ public class ValidationRegex {
     }
 
     public static boolean isNotRegexIdNickname(String target) {
-        String regex = "^[A-Za-z._]*$";
-        return !target.matches(regex);
+        String regex = "^[a-z0-9._]+$";
+        return !Pattern.matches(regex, target);
     }
 }
 
