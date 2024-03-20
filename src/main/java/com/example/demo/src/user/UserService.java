@@ -154,17 +154,21 @@ public class UserService {
     public void setAgreement(Long userId, PatchUserReq.PatchUserAgreementReq patchUserAgreementReq) {
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(NOT_FIND_USER));
         Agreement agreement = user.getAgreement();
-
         if(agreement != null){
             agreement.updateEssentialPolicy(patchUserAgreementReq.isAgreement());
         } else {
             user.updateAgreement(new Agreement(patchUserAgreementReq.isAgreement()));
         }
-        user.updateState(ACTIVE);
+        if(patchUserAgreementReq.isAgreement()) {
+            user.updateState(ACTIVE);
+        }
     }
 
-    public boolean isNotExistUser(Long userId) {
+    public boolean isNotExistActiveUser(Long userId) {
         return !userRepository.existsByIdAndState(userId, ACTIVE);
+    }
+    public boolean isNotExistUser(Long userId) {
+        return !userRepository.existsById(userId);
     }
 
     public BaseResponse<String> setBirthday(Long userId, String year, String month, String day) {

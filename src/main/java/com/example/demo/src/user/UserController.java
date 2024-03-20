@@ -280,11 +280,12 @@ public class UserController {
         if(userService.isNotExistUser(userId)){
             return new BaseResponse<>(NOT_FIND_USER);
         }
+        userService.setAgreement(userId, patchUserAgreementReq);
+
         if(patchUserAgreementReq.isAgreement() == false) {
             userService.deleteUser(userId); // 동의하지 않으면 이용 불가
             return new BaseResponse<>(DISAGREEMENT_SUCCESS);
         }
-        userService.setAgreement(userId, patchUserAgreementReq);
         return new BaseResponse<>(UPDATE_AGREEMENT_SUCCESS);
     }
 
@@ -294,7 +295,7 @@ public class UserController {
     @ResponseBody
     @PatchMapping(value = "/birthday/{userId}")
     public BaseResponse<String> setBirthday(@PathVariable("userId") Long userId, @RequestBody PatchUserBirthdayReq patchUserBirthdayReq) {
-        if(userService.isNotExistUser(userId)){
+        if(userService.isNotExistActiveUser(userId)){
             return new BaseResponse<>(NOT_FIND_USER);
         }
         String year = patchUserBirthdayReq.getYear();

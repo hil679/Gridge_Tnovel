@@ -2,9 +2,11 @@ package com.example.demo.src.agreement.entity;
 
 import com.example.demo.common.entity.BaseEntity;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@NoArgsConstructor
 @Getter
 @Entity
 @Table(name = "AGREEMENT")

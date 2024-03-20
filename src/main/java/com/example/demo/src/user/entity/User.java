@@ -49,7 +49,7 @@ public class User extends BaseEntity {
     @Column
     private LocalDate birthday;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "agreementId")
     private Agreement agreement;
 
