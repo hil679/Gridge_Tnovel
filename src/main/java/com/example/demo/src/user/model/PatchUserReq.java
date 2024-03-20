@@ -18,4 +18,7 @@ public class PatchUserReq {
         private String existPassword;
         private String newPassword;
     }
+    public static class PatchUserAgreementReq {
+        private boolean agreement;
+    }
 }

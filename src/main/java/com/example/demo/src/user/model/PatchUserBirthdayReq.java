@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostUserBirthdayReq {
+public class PatchUserBirthdayReq {
     private String year;
     private String month;
     private String day;

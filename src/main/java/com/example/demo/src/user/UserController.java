@@ -275,7 +275,6 @@ public class UserController {
 
     /**
      * 동의 받기
-     *
      */
     @ResponseBody
     @PostMapping(value = "/agree")
@@ -288,14 +287,14 @@ public class UserController {
      * 생일 입력
      */
     @ResponseBody
-    @PostMapping(value = "/birthday/{userId}")
-    public BaseResponse<String> setBirthday(@PathVariable("userId") Long userId, @RequestBody PostUserBirthdayReq postUserBirthdayReq) {
+    @PatchMapping(value = "/birthday/{userId}")
+    public BaseResponse<String> setBirthday(@PathVariable("userId") Long userId, @RequestBody PatchUserBirthdayReq patchUserBirthdayReq) {
         if(userService.isNotExistUser(userId)){
             return new BaseResponse<>(NOT_FIND_USER);
         }
-        String year = postUserBirthdayReq.getYear();
-        String month = postUserBirthdayReq.getMonth();
-        String day = postUserBirthdayReq.getDay();
+        String year = patchUserBirthdayReq.getYear();
+        String month = patchUserBirthdayReq.getMonth();
+        String day = patchUserBirthdayReq.getDay();
         if(invalidateBirthday(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day))) {
             return new BaseResponse<>(INVALID_BIRTHDAY);
         }
