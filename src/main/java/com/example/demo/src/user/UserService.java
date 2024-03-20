@@ -4,6 +4,7 @@ package com.example.demo.src.user;
 
 import com.example.demo.common.exceptions.BaseException;
 import com.example.demo.common.response.BaseResponse;
+import com.example.demo.src.agreement.entity.Agreement;
 import com.example.demo.src.user.entity.User;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
@@ -148,6 +149,18 @@ public class UserService {
     public GetUserRes getUserByEmail(String email) {
         User user = userRepository.findByEmailAndState(email, ACTIVE).orElseThrow(() -> new BaseException(NOT_FIND_USER));
         return new GetUserRes(user);
+    }
+
+    public void setAgreement(Long userId, PatchUserReq.PatchUserAgreementReq patchUserAgreementReq) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(NOT_FIND_USER));
+        Agreement agreement = user.getAgreement();
+
+        if(agreement != null){
+            agreement.updateEssentialPolicy(patchUserAgreementReq.isAgreement());
+        } else {
+            user.updateAgreement(new Agreement(patchUserAgreementReq.isAgreement()));
+        }
+        user.updateState(ACTIVE);
     }
 
     public boolean isNotExistUser(Long userId) {

@@ -71,7 +71,10 @@ public enum BaseResponseStatus {
      */
     VALID_PHONE_NUMBER(true, HttpStatus.OK.value(), "알맞은 전화번호 형식입니다."),
     VALID_ID_NICKNAME(true, HttpStatus.OK.value(), "알맞은 아이디(사용자 이름) 형식입니다."),
-    BIRTHDAY_UPDATE_SUCCESS(true, HttpStatus.OK.value(), "생일이 정상적으로 입력됐습니다.");
+    BIRTHDAY_UPDATE_SUCCESS(true, HttpStatus.OK.value(), "생일이 정상적으로 입력됐습니다."),
+    UPDATE_AGREEMENT_SUCCESS(true, HttpStatus.OK.value(), "필수 정보 동의했습니다." ),
+    DISAGREEMENT_SUCCESS(true, HttpStatus.OK.value(), "필수 정보 동의하지 않았습니다.");
+
 
 
     private final boolean isSuccess;

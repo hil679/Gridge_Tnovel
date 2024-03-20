@@ -2,6 +2,7 @@ package com.example.demo.src.agreement.entity;
 
 import com.example.demo.common.entity.BaseEntity;
 import lombok.Getter;
+
 import javax.persistence.*;
 
 @Getter
@@ -15,4 +16,12 @@ public class Agreement extends BaseEntity { // 선택 동의 확장성 고려하
 
     @Column(nullable = false)
     private boolean essentialPolicy;
+
+    public Agreement(boolean essentialAgreement) {
+        this.essentialPolicy = essentialPolicy;
+    }
+
+    public void updateEssentialPolicy(boolean essentialPolicy) {
+        this.essentialPolicy = essentialPolicy;
+    }
 }

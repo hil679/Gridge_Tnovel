@@ -49,9 +49,9 @@ public class User extends BaseEntity {
     @Column
     private LocalDate birthday;
 
-//    @OneToOne
-//    @JoinColumn(name = "agreementId")
-//    private Agreement agreement;
+    @OneToOne
+    @JoinColumn(name = "agreementId")
+    private Agreement agreement;
 
     @Builder
     public User(Long id, String email, String password, String name, String idNickname, String phoneNumber, Constant.SocialLoginType loginType, boolean isOAuth) {
@@ -71,6 +71,9 @@ public class User extends BaseEntity {
     }
     public void updateBirthDay(String birthday) {
         this.birthday = LocalDate.parse(birthday, DateTimeFormatter.ISO_DATE); //"ex) 2024-03-11"
+    }
+    public void updateAgreement(Agreement essentialAgreement) {
+        this.agreement = essentialAgreement;
     }
 
     public void deleteUser() {

@@ -3,9 +3,7 @@ package com.example.demo.src.user;
 
 import com.example.demo.common.Constant.SocialLoginType;
 import com.example.demo.common.oauth.OAuthService;
-import com.example.demo.src.user.entity.User;
 import com.example.demo.utils.JwtService;
-import com.example.demo.utils.SHA256;
 import lombok.RequiredArgsConstructor;
 import com.example.demo.common.exceptions.BaseException;
 import com.example.demo.common.response.BaseResponse;
@@ -15,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 
 import static com.example.demo.common.Constant.BirthDayLimit.FEB_DAY_MAX;
 import static com.example.demo.common.Constant.BirthDayLimit.YEAR_MIN;
 import static com.example.demo.common.response.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.*;
+import static com.example.demo.src.user.model.PatchUserReq.PatchUserAgreementReq;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -277,10 +275,17 @@ public class UserController {
      * 동의 받기
      */
     @ResponseBody
-    @PostMapping(value = "/agree")
-    public String setAgreement(boolean agreement) {
-
-        return "success agree process";
+    @PatchMapping(value = "/agree/{userId}")
+    public BaseResponse<String> setAgreement(@PathVariable Long userId, @RequestBody PatchUserReq.PatchUserAgreementReq patchUserAgreementReq) {
+        if(userService.isNotExistUser(userId)){
+            return new BaseResponse<>(NOT_FIND_USER);
+        }
+        if(patchUserAgreementReq.isAgreement() == false) {
+            userService.deleteUser(userId); // 동의하지 않으면 이용 불가
+            return new BaseResponse<>(DISAGREEMENT_SUCCESS);
+        }
+        userService.setAgreement(userId, patchUserAgreementReq);
+        return new BaseResponse<>(UPDATE_AGREEMENT_SUCCESS);
     }
 
     /**
