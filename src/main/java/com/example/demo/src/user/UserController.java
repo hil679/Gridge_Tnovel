@@ -3,6 +3,7 @@ package com.example.demo.src.user;
 
 import com.example.demo.common.Constant.SocialLoginType;
 import com.example.demo.common.oauth.OAuthService;
+import com.example.demo.src.user.entity.User;
 import com.example.demo.utils.JwtService;
 import com.example.demo.utils.SHA256;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 
+import static com.example.demo.common.Constant.BirthDayLimit.FEB_DAY_MAX;
+import static com.example.demo.common.Constant.BirthDayLimit.YEAR_MIN;
 import static com.example.demo.common.response.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.*;
 
@@ -278,5 +282,34 @@ public class UserController {
     public String setAgreement(boolean agreement) {
 
         return "success agree process";
+    }
+
+    /**
+     * 생일 입력
+     */
+    @ResponseBody
+    @PostMapping(value = "/birthday/{userId}")
+    public BaseResponse<String> setBirthday(@PathVariable("userId") Long userId, @RequestBody PostUserBirthdayReq postUserBirthdayReq) {
+        if(userService.isNotExistUser(userId)){
+            return new BaseResponse<>(NOT_FIND_USER);
+        }
+        String year = postUserBirthdayReq.getYear();
+        String month = postUserBirthdayReq.getMonth();
+        String day = postUserBirthdayReq.getDay();
+        if(invalidateBirthday(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day))) {
+            return new BaseResponse<>(INVALID_BIRTHDAY);
+        }
+
+        return userService.setBirthday(userId, year, month, day);
+    }
+
+    private boolean invalidateBirthday(Integer year, Integer month, Integer day){
+        int feb = 2;
+
+        if(YEAR_MIN.getValue() <= year)
+            return true;
+        if(month == feb && day > FEB_DAY_MAX.getValue())
+            return true;
+        return false;
     }
 }

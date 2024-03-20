@@ -2,8 +2,8 @@ package com.example.demo.src.user;
 
 
 
-import com.example.demo.common.entity.BaseEntity.State;
 import com.example.demo.common.exceptions.BaseException;
+import com.example.demo.common.response.BaseResponse;
 import com.example.demo.src.user.entity.User;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.example.demo.common.Constant.BirthDayLimit.FEB_DAY_MAX;
+import static com.example.demo.common.Constant.BirthDayLimit.YEAR_MIN;
 import static com.example.demo.common.entity.BaseEntity.State.ACTIVE;
 import static com.example.demo.common.response.BaseResponseStatus.*;
 
@@ -146,5 +148,17 @@ public class UserService {
     public GetUserRes getUserByEmail(String email) {
         User user = userRepository.findByEmailAndState(email, ACTIVE).orElseThrow(() -> new BaseException(NOT_FIND_USER));
         return new GetUserRes(user);
+    }
+
+    public boolean isNotExistUser(Long userId) {
+        return !userRepository.existsByIdAndState(userId, ACTIVE);
+    }
+
+    public BaseResponse<String> setBirthday(Long userId, String year, String month, String day) {
+        User user = userRepository.findByIdAndState(userId, ACTIVE).orElseThrow(() -> new BaseException(NOT_FIND_USER));
+
+        String birthday = String.join("-", year, month, day);
+        user.updateBirthDay(birthday.toString());
+        return new BaseResponse<>(BIRTHDAY_UPDATE_SUCCESS);
     }
 }

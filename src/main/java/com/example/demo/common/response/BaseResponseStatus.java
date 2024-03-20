@@ -29,9 +29,9 @@ public enum BaseResponseStatus {
     POST_USERS_EXISTS_EMAIL(false,HttpStatus.BAD_REQUEST.value(),"중복된 이메일입니다."),
     POST_USERS_INVALID_PASSWORD(false, HttpStatus.BAD_REQUEST.value(), "비밀번호는 6자 이상 20자 이하여야 합니다."),
     POST_USERS_INVALID_PHONE_NUMBER(false, HttpStatus.BAD_REQUEST.value(), "전화번호에 숫자만 입력해주세요."),
-    POST_USERS_OVER_LENGTH_PHONE_NUMBER(false, HttpStatus.BAD_REQUEST.value(), "전화번호는 6자 이상 20자 이하여야 합니다."),
+    POST_USERS_OVER_LENGTH_PHONE_NUMBER(false, HttpStatus.BAD_REQUEST.value(), "전화번호는 20자 이하여야 합니다."),
     POST_USERS_OVER_LENGTH_NAME(false, HttpStatus.BAD_REQUEST.value(), "이름은 20자 이하여야 합니다."),
-    POST_USERS_INVALID_ID_NICKNAME(false, HttpStatus.BAD_REQUEST.value(), "사용자 이름에는 문자, 숫자, 밑줄 및 마침표만 사용할 수 있습니다."),
+    POST_USERS_INVALID_ID_NICKNAME(false, HttpStatus.BAD_REQUEST.value(), "사용자 이름에는 소문자, 숫자, 밑줄 및 마침표만 사용할 수 있습니다."),
     POST_USERS_OVER_LENGTH_ID_NICKNAME(false, HttpStatus.BAD_REQUEST.value(), "아이디(사용자 이름) 20자 이하여야 합니다."),
     POST_TEST_EXISTS_MEMO(false,HttpStatus.BAD_REQUEST.value(),"중복된 메모입니다."),
 
@@ -47,6 +47,7 @@ public enum BaseResponseStatus {
     INVALID_USER_JWT(false,HttpStatus.FORBIDDEN.value(),"권한이 없는 유저의 접근입니다."),
     NOT_FIND_USER(false,HttpStatus.NOT_FOUND.value(),"일치하는 유저가 없습니다."),
     INVALID_OAUTH_TYPE(false, HttpStatus.BAD_REQUEST.value(), "알 수 없는 소셜 로그인 형식입니다."),
+    INVALID_BIRTHDAY(false, HttpStatus.BAD_REQUEST.value(), "불가능한 생년월일입니다. "),
 
 
 
@@ -69,7 +70,8 @@ public enum BaseResponseStatus {
      * 200: SUCCESS
      */
     VALID_PHONE_NUMBER(true, HttpStatus.OK.value(), "알맞은 전화번호 형식입니다."),
-    VALID_ID_NICKNAME(true, HttpStatus.OK.value(), "알맞은 아이디(사용자 이름) 형식입니다.");
+    VALID_ID_NICKNAME(true, HttpStatus.OK.value(), "알맞은 아이디(사용자 이름) 형식입니다."),
+    BIRTHDAY_UPDATE_SUCCESS(true, HttpStatus.OK.value(), "생일이 정상적으로 입력됐습니다.");
 
 
     private final boolean isSuccess;
