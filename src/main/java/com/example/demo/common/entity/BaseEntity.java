@@ -30,4 +30,8 @@ public class BaseEntity {
     public enum State {
         ACTIVE, INACTIVE;
     }
+
+    public void updateState(State state) {
+        this.state = state;
+    }
 }
