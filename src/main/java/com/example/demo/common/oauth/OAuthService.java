@@ -18,6 +18,7 @@ import static com.example.demo.common.response.BaseResponseStatus.INVALID_OAUTH_
 @RequiredArgsConstructor
 public class OAuthService {
     private final GoogleOauth googleOauth;
+    private final KakaoOauth kakaoOauth;
     private final HttpServletResponse response;
     private final UserService userService;
     private final JwtService jwtService;
@@ -28,6 +29,9 @@ public class OAuthService {
         switch (socialLoginType){ //각 소셜 로그인을 요청하면 소셜로그인 페이지로 리다이렉트 해주는 프로세스이다.
             case GOOGLE:{
                 redirectURL= googleOauth.getOauthRedirectURL();
+            }break;
+            case KAKAO:{
+                redirectURL= kakaoOauth.getOauthRedirectURL();
             }break;
             default:{
                 throw new BaseException(INVALID_OAUTH_TYPE);
@@ -50,6 +54,7 @@ public class OAuthService {
 
                 //액세스 토큰을 다시 구글로 보내 구글에 저장된 사용자 정보가 담긴 응답 객체를 받아온다.
                 ResponseEntity<String> userInfoResponse = googleOauth.requestUserInfo(oAuthToken);
+                System.out.println(userInfoResponse);
                 //다시 JSON 형식의 응답 객체를 자바 객체로 역직렬화한다.
                 GoogleUser googleUser = googleOauth.getUserInfo(userInfoResponse);
 
@@ -67,6 +72,26 @@ public class OAuthService {
                 }else { // user가 DB에 없다면, 회원가입 진행
                     // 유저 정보 저장
                     PostUserRes postUserRes = userService.createOAuthUser(googleUser.toEntity());
+                    GetSocialOAuthRes getSocialOAuthRes = new GetSocialOAuthRes(postUserRes.getJwt(), postUserRes.getId(), oAuthToken.getAccess_token(), oAuthToken.getToken_type());
+                    return getSocialOAuthRes;
+                }
+            }
+            case KAKAO: {
+                ResponseEntity<String> accessTokenResponse = kakaoOauth.requestAccessToken(code);
+                KakaoOauthToken oAuthToken = kakaoOauth.getAccessToken(accessTokenResponse);
+
+                ResponseEntity<String> userInfoResponse = kakaoOauth.requestUserInfo(oAuthToken);
+                KakaoUser kakaoUser = kakaoOauth.getUserInfo(userInfoResponse);
+
+                //우리 서버의 db와 대조하여 해당 user가 존재하는 지 확인한다.
+                if(userService.checkUserByEmail(kakaoUser.getEmail())) {
+                    GetUserRes getUserRes = userService.getUserByEmail(kakaoUser.getEmail());
+
+                    String jwtToken = jwtService.createJwt(getUserRes.getId());
+                    GetSocialOAuthRes getSocialOAuthRes = new GetSocialOAuthRes(jwtToken, getUserRes.getId(), oAuthToken.getAccess_token(), oAuthToken.getToken_type());
+                    return getSocialOAuthRes;
+                }else { // user가 DB에 없다면, 회원가입 진행
+                    PostUserRes postUserRes = userService.createOAuthUser(kakaoUser.toEntity());
                     GetSocialOAuthRes getSocialOAuthRes = new GetSocialOAuthRes(postUserRes.getJwt(), postUserRes.getId(), oAuthToken.getAccess_token(), oAuthToken.getToken_type());
                     return getSocialOAuthRes;
                 }

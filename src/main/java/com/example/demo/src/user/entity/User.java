@@ -27,13 +27,13 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, length = 20)
+    @Column(length = 20) //nullable = false,
     private String idNickname;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column //(nullable = false)
     private String phoneNumber;
 
     @Column(nullable = false)
@@ -61,6 +61,17 @@ public class User extends BaseEntity {
         this.name = name;
         this.idNickname = idNickname;
         this.phoneNumber = phoneNumber;
+        this.loginType = loginType;
+        this.isOAuth = isOAuth;
+        this.registerDate = LocalDate.now();
+    }
+
+    @Builder
+    public User(Long id, String email, String password, String name, Constant.SocialLoginType loginType, boolean isOAuth) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.name = name;
         this.loginType = loginType;
         this.isOAuth = isOAuth;
         this.registerDate = LocalDate.now();
