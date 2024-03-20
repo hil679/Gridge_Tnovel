@@ -151,15 +151,15 @@ public class UserService {
         return new GetUserRes(user);
     }
 
-    public void setAgreement(Long userId, PatchUserReq.PatchUserAgreementReq patchUserAgreementReq) {
+    public void setAgreement(Long userId, boolean essentialAgree) {
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(NOT_FIND_USER));
         Agreement agreement = user.getAgreement();
         if(agreement != null){
-            agreement.updateEssentialPolicy(patchUserAgreementReq.isAgreement());
+            agreement.updateEssentialPolicy(essentialAgree);
         } else {
-            user.updateAgreement(new Agreement(patchUserAgreementReq.isAgreement()));
+            user.updateAgreement(new Agreement(essentialAgree));
         }
-        if(patchUserAgreementReq.isAgreement()) {
+        if(essentialAgree) {
             user.updateState(ACTIVE);
         }
     }
