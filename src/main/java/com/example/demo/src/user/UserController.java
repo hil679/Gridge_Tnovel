@@ -9,6 +9,7 @@ import com.example.demo.common.exceptions.BaseException;
 import com.example.demo.common.response.BaseResponse;
 import com.example.demo.src.user.model.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -280,13 +281,21 @@ public class UserController {
         if(userService.isNotExistUser(userId)){
             return new BaseResponse<>(NOT_FIND_USER);
         }
-        userService.setAgreement(userId, patchUserAgreementReq);
+        userService.setAgreement(userId, patchUserAgreementReq.isAgreement());
 
         if(patchUserAgreementReq.isAgreement() == false) {
             userService.deleteUser(userId); // 동의하지 않으면 이용 불가
             return new BaseResponse<>(DISAGREEMENT_SUCCESS);
         }
         return new BaseResponse<>(UPDATE_AGREEMENT_SUCCESS);
+    }
+
+    /**
+    *동의 알림 - 매해 특정 날짜에 모든 유저 일괄 호출 필요
+     */
+    @GetMapping(value = "/notify/agree/renewal")
+    public BaseResponse<String> notifyAgreement() {
+        return new BaseResponse<>("개인정보 처리 방침에 의해 다시 동의해주세요.");
     }
 
     /**
