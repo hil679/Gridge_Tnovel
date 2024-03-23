@@ -82,7 +82,13 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<GetUserRes> getUsers() {
         List<GetUserRes> getUserResList = userRepository.findAllByState(ACTIVE).stream()
-                .map(GetUserRes::new)
+                .map(user -> {
+                    try {
+                        return new GetUserRes(user);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .collect(Collectors.toList());
         return getUserResList;
     }
@@ -90,14 +96,20 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<GetUserRes> getUsersByEmail(String email) {
         List<GetUserRes> getUserResList = userRepository.findAllByEmailAndState(email, ACTIVE).stream()
-                .map(GetUserRes::new)
+                .map(user -> {
+                    try {
+                        return new GetUserRes(user);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .collect(Collectors.toList());
         return getUserResList;
     }
 
 
     @Transactional(readOnly = true)
-    public GetUserRes getUser(Long userId) {
+    public GetUserRes getUser(Long userId) throws Exception {
         User user = userRepository.findByIdAndState(userId, ACTIVE)
                 .orElseThrow(() -> new BaseException(NOT_FIND_USER));
         return new GetUserRes(user);
@@ -124,7 +136,7 @@ public class UserService {
         return false;
     }
 
-    public PostLoginRes logIn(PostLoginReq postLoginReq) throws Exception {
+    public PostLoginRes logIn(PostLoginReq postLoginReq) throws Exception{
         User user = userRepository.findByEmailOrIdNicknameOrPhoneNumberAndState(postLoginReq.getEmail(),
                         postLoginReq.getIdNickname(),
                         new AES256().encrypt(postLoginReq.getPhoneNumber()),
@@ -148,7 +160,7 @@ public class UserService {
 
     }
 
-    public GetUserRes getUserByEmail(String email) {
+    public GetUserRes getUserByEmail(String email) throws Exception {
         User user = userRepository.findByEmailAndState(email, ACTIVE).orElseThrow(() -> new BaseException(NOT_FIND_USER));
         return new GetUserRes(user);
     }

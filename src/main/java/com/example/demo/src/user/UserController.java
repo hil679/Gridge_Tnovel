@@ -158,7 +158,7 @@ public class UserController {
     // Path-variable
     @ResponseBody
     @GetMapping("/{userId}") // (GET) 127.0.0.1:9000/app/users/:userId
-    public BaseResponse<GetUserRes> getUser(@PathVariable("userId") Long userId) {
+    public BaseResponse<GetUserRes> getUser(@PathVariable("userId") Long userId) throws Exception {
         GetUserRes getUserRes = userService.getUser(userId);
         return new BaseResponse<>(getUserRes);
     }
