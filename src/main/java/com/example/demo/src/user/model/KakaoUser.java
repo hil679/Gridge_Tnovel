@@ -24,6 +24,8 @@ public class KakaoUser {
                 .name(new AES256().encrypt(this.name))
                 .isOAuth(true)
                 .loginType(Constant.SocialLoginType.KAKAO)
+                .phoneNumber(new AES256().encrypt("None"))
+                .idNickname("None")
                 .build();
     }
 }

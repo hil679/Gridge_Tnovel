@@ -31,6 +31,8 @@ public class GoogleUser {
                 .name(new AES256().encrypt(this.name))
                 .isOAuth(true)
                 .loginType(Constant.SocialLoginType.GOOGLE)
+                .phoneNumber(new AES256().encrypt("None"))
+                .idNickname("None")
                 .build();
     }
 }

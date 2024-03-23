@@ -30,5 +30,6 @@ public class AES256 {
         byte[] decodedBytes = Base64.getDecoder().decode(cipherText);
         byte[] decrypted = cipher.doFinal(decodedBytes);
         return new String(decrypted, "UTF-8");
+        //URLDecoder.decode(decrypted.toString(), "UTF-8");
     }
 }
