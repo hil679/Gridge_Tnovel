@@ -9,7 +9,6 @@ import com.example.demo.common.exceptions.BaseException;
 import com.example.demo.common.response.BaseResponse;
 import com.example.demo.src.user.model.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -20,7 +19,6 @@ import static com.example.demo.common.Constant.BirthDayLimit.FEB_DAY_MAX;
 import static com.example.demo.common.Constant.BirthDayLimit.YEAR_MIN;
 import static com.example.demo.common.response.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.*;
-import static com.example.demo.src.user.model.PatchUserReq.PatchUserAgreementReq;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,7 +42,7 @@ public class UserController {
     // Body
     @ResponseBody
     @PostMapping("")
-    public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
+    public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) throws Exception {
         // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
         int MAX_LENGTH = 20;
         int MIN_LENGTH_PW = 6;
@@ -109,7 +107,7 @@ public class UserController {
     * 실시간으로 전화번호 타당성 검사 위한 api
      */
     @PostMapping("validate/phone-number/{phoneNumber}")
-    public BaseResponse<String> validatePhoneNumber(@PathVariable String phoneNumber){
+    public BaseResponse<String> validatePhoneNumber(@PathVariable String phoneNumber) throws Exception {
         if (userService.checkUserByPhoneNumber(phoneNumber)) {
             return new BaseResponse<>(DUPLICATED_PHONE_NUMBER);
         } else if (isNotRegexPhoneNumber(phoneNumber)) {
@@ -254,7 +252,7 @@ public class UserController {
     @GetMapping(value = "/auth/{socialLoginType}/login/callback")
     public BaseResponse<GetSocialOAuthRes> socialLoginCallback(
             @PathVariable(name = "socialLoginType") String socialLoginPath,
-            @RequestParam(name = "code") String code) throws IOException, BaseException{
+            @RequestParam(name = "code") String code) throws Exception {
         log.info(">> 소셜 로그인 API 서버로부터 받은 code : {}", code);
         SocialLoginType socialLoginType = SocialLoginType.valueOf(socialLoginPath.toUpperCase());
         GetSocialOAuthRes getSocialOAuthRes = oAuthService.oAuthLoginOrJoin(socialLoginType,code);

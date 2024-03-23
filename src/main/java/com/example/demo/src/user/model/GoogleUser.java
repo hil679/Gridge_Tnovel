@@ -2,6 +2,8 @@ package com.example.demo.src.user.model;
 
 import com.example.demo.common.Constant;
 import com.example.demo.src.user.entity.User;
+import com.example.demo.utils.AES256;
+import com.example.demo.utils.SHA256;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,11 +24,11 @@ public class GoogleUser {
     public String picture;
     public String locale;
 
-    public User toEntity() {
+    public User toEntity() throws Exception {
         return User.builder()
                 .email(this.email)
                 .password("NONE")
-                .name(this.name)
+                .name(new AES256().encrypt(this.name))
                 .isOAuth(true)
                 .loginType(Constant.SocialLoginType.GOOGLE)
                 .build();

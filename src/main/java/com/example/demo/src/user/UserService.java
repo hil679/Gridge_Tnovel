@@ -7,6 +7,7 @@ import com.example.demo.common.response.BaseResponse;
 import com.example.demo.src.agreement.entity.Agreement;
 import com.example.demo.src.user.entity.User;
 import com.example.demo.src.user.model.*;
+import com.example.demo.utils.AES256;
 import com.example.demo.utils.JwtService;
 import com.example.demo.utils.SHA256;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.example.demo.common.Constant.BirthDayLimit.FEB_DAY_MAX;
-import static com.example.demo.common.Constant.BirthDayLimit.YEAR_MIN;
 import static com.example.demo.common.entity.BaseEntity.State.ACTIVE;
 import static com.example.demo.common.response.BaseResponseStatus.*;
 
@@ -45,10 +44,10 @@ public class UserService {
             encryptPwd = new SHA256().encrypt(postUserReq.getPassword());
             postUserReq.setPassword(encryptPwd);
 
-            String encryptPhoneNumber = new SHA256().encrypt(postUserReq.getPhoneNumber());
+            String encryptPhoneNumber = new AES256().encrypt(postUserReq.getPhoneNumber());
             postUserReq.setPhoneNumber(encryptPhoneNumber);
 
-            String encryptName= new SHA256().encrypt(postUserReq.getName());
+            String encryptName= new AES256().encrypt(postUserReq.getName());
             postUserReq.setName(encryptName);
         } catch (Exception exception) {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
@@ -112,8 +111,8 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public boolean checkUserByPhoneNumber(String phoneNumber) {
-        Optional<User> result = userRepository.findByPhoneNumberAndState(new SHA256().encrypt(phoneNumber), ACTIVE);
+    public boolean checkUserByPhoneNumber(String phoneNumber) throws Exception {
+        Optional<User> result = userRepository.findByPhoneNumberAndState(new AES256().encrypt(phoneNumber), ACTIVE);
         if (result.isPresent()) return true;
         return false;
     }

@@ -43,7 +43,7 @@ public class OAuthService {
     }
 
 
-    public GetSocialOAuthRes oAuthLoginOrJoin(Constant.SocialLoginType socialLoginType, String code) throws IOException {
+    public GetSocialOAuthRes oAuthLoginOrJoin(Constant.SocialLoginType socialLoginType, String code) throws Exception {
 
         switch (socialLoginType) {
             case GOOGLE: {
