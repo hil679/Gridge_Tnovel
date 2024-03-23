@@ -24,6 +24,7 @@ public enum BaseResponseStatus {
     USERS_EMPTY_NAME(false, HttpStatus.BAD_REQUEST.value(), "이름을 입력해주세요."),
     USERS_EMPTY_ID_NICKNAME(false, HttpStatus.BAD_REQUEST.value(), "아이디(사용자 이름)을 입력해주세요."),
     TEST_EMPTY_COMMENT(false, HttpStatus.BAD_REQUEST.value(), "코멘트를 입력해주세요."),
+    USERS_EMPTY_ID_FOR_LOGIN(false, HttpStatus.BAD_REQUEST.value(), "로그인을 위한 아이디를 입력해주세요."),
 
     POST_USERS_INVALID_EMAIL(false, HttpStatus.BAD_REQUEST.value(), "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,HttpStatus.BAD_REQUEST.value(),"중복된 이메일입니다."),

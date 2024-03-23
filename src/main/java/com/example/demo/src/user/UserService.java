@@ -124,8 +124,11 @@ public class UserService {
         return false;
     }
 
-    public PostLoginRes logIn(PostLoginReq postLoginReq) {
-        User user = userRepository.findByEmailAndState(postLoginReq.getEmail(), ACTIVE)
+    public PostLoginRes logIn(PostLoginReq postLoginReq) throws Exception {
+        User user = userRepository.findByEmailOrIdNicknameOrPhoneNumberAndState(postLoginReq.getEmail(),
+                        postLoginReq.getIdNickname(),
+                        new AES256().encrypt(postLoginReq.getPhoneNumber()),
+                        ACTIVE)
                 .orElseThrow(() -> new BaseException(NOT_FIND_USER));
 
         String encryptPwd;
